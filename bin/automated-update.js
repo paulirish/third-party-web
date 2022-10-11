@@ -79,8 +79,8 @@ async function getTargetDatasetDate() {
 async function main() {
   const {dateStringUnderscore, dateStringHypens} = await getTargetDatasetDate()
 
-  const observedDomainsFilename = `${__dirname}/../data/${dateStringHypens}-observed-domains.json`
-  const entityScriptingFilename = `${__dirname}/../data/${dateStringHypens}-entity-scripting.json`
+  const observedDomainsFilename = `${__dirname}/../data/${dateStringHypens}-observed-domains2.json`
+  const entityScriptingFilename = `${__dirname}/../data/${dateStringHypens}-entity-scripting2.json`
   const allObservedDomainsFilename = `${__dirname}/../sql/all-observed-domains-query.sql`
   const entityPerPageFilename = `${__dirname}/../sql/entity-per-page.sql`
 
@@ -94,6 +94,10 @@ async function main() {
 
   const allObservedDomainsQuery = getQueryForTable(allObservedDomainsFilename, dateStringUnderscore)
   const entityPerPageQuery = getQueryForTable(entityPerPageFilename, dateStringUnderscore)
+
+
+  console.log({allObservedDomainsQuery, entityPerPageQuery});
+
 
   // Create all domains table.
   await withExistenceCheck(observedDomainsFilename, {
@@ -132,19 +136,19 @@ async function main() {
       ]
 
       console.log('Creating', dateStringUnderscore, 'table. This may take a while...')
-      await bqClient
-        .dataset('third_party_web')
-        .table(dateStringUnderscore)
-        .insert(rowsForNewTable, {schema, location: 'US'})
+      // await bqClient
+      //   .dataset('third_party_web')
+      //   .table(dateStringUnderscore)
+      //   .insert(rowsForNewTable, {schema, location: 'US'})
       console.log('Inserted', rowsForNewTable.length, 'rows')
     },
     deleteFn: async () => {
-      const bqClient = new BigQuery()
-      await bqClient
-        .dataset('third_party_web')
-        .table(dateStringUnderscore)
-        .delete()
-        .catch(() => {})
+      // const bqClient = new BigQuery()
+      // await bqClient
+      //   .dataset('third_party_web')
+      //   .table(dateStringUnderscore)
+      //   .delete()
+      //   .catch(() => {})
     },
     exitFn: () => {},
   })
